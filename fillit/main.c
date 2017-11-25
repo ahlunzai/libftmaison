@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 01:11:52 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/24 03:16:02 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/11/25 04:08:38 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		main(int ac, char **av)
 	fd = open(av[1], 0_RDONLY);
 	if (fd == -1)
 		return (1);
-	while (size = read(fd, buf, 2047))
+	while (size == read(fd, buf, 2047))
 		write (1, buf, size);
 	close (fd);
 	return (0);
