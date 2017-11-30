@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/26 00:02:18 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/29 08:18:47 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/11/30 03:06:03 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,13 @@ char **tableaupieces(char *str)
 	while (*str)
 	{
 		j = 0;
-		tab[i] = (char *)malloc(sizeof(char) * 4);
+		if ((i + 1) % 5 == 0)
+			tab[i] = (char *)malloc(sizeof(char) * 1);
+		else
+			tab[i] = (char *)malloc(sizeof(char) * 5);
 		while (*str != '\n')
 			tab[i][j++] = *str++;
+		str++;
 		tab[i][j] = '\0';
 		i++;
 	}
@@ -49,7 +53,7 @@ char **tableaupieces(char *str)
 	return (tab);
 }
 
-pieces_list		*ft_construction(char **tab)
+pieces_list		**ft_construction(char **tab)
 {
 	int i;
 	int j;
@@ -57,14 +61,21 @@ pieces_list		*ft_construction(char **tab)
 	int shiftx;
 	int shifty;
 	pieces_list *list;
+	pieces_list *save;
+	pieces_list *tmp;
+	pieces_list **begin;
 
-	i = -1;
-	while (*tab)
+	list = (pieces_list *)malloc(sizeof(pieces_list));
+	begin = (pieces_list **)malloc(sizeof(pieces_list *));
+	tmp = NULL;
+	save = list;
+	i = 0;
+	while (tab[i] != 0)
 	{
-		j = -1;
 		k = 0;
-		while ((++i + 1) % 5 != 0)
+		while ((i + 1) % 5 != 0)
 		{
+			j = -1;
 			while (++j < 4)
 			{
 				if (tab[i][j] == '#')
@@ -75,17 +86,21 @@ pieces_list		*ft_construction(char **tab)
 						shifty = j;
 					}
 					list->tab[k][0] = i - shiftx;
-					list->tab[k++][1] = j - shifty;
+					list->tab[k][1] = j - shifty;
+					k++;
 				}
 			}
+			i++;
 		}
 		if ((i + 1) % 5 == 0)
 		{
 			i++;
-			list->previous = list;
+			list->previous = tmp;
+			tmp = list;
 			list = list->next;
 		}
 	}
 	list = 0;
-	return (list);
+	*begin = save;
+	return (begin);
 }

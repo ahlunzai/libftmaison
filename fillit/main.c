@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 01:41:55 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/29 06:05:04 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/11/30 04:18:17 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include "libft.h"
 #include "header.h"
 
-int		diesepoint(char *str, int n)
+int		diesepoint(char *str)
 {
 	int j;
 	int k;
@@ -30,7 +30,7 @@ int		diesepoint(char *str, int n)
 	i = 0;
 	j = 0;
 	k = 0;
-	while (str[i] && i * n < 20 * n)
+	while (str[i] && i < 20)
 	{
 		while (str[i] && (i + 1) % 5 != 0)
 		{
@@ -56,17 +56,16 @@ int		verification(char *str)
 	n = 1;
 	while (*str)
 	{
-		if (diesepoint(str, n) == 0)
+		if (diesepoint(str) == 0)
 		{
 			str = str + 19;
-			n++;
 			if (str[1] == '\0')
 				return (0);
 			if (str[1] == '\n')
 			{
-				str = str + 2;
 				if (str[2] != '#' && str[2] != '.')
 					return (1);
+				str = str + 2;
 			}
 			else
 				str = str + 1;
@@ -77,10 +76,41 @@ int		verification(char *str)
 	return (0);
 }
 
+char *read_from_file(const char *filename)
+{
+	long int size = 0;
+	FILE *file = fopen(filename, "r");
+
+	if(!file) {
+		fputs("File error.\n", stderr);
+		return NULL;
+	}
+
+	fseek(file, 0, SEEK_END);
+	size = ftell(file);
+	rewind(file);
+
+	char *result = (char *) malloc(size);
+	if(!result) {
+		fputs("Memory error.\n", stderr);
+		return NULL;
+	}
+
+	if(fread(result, 1, size, file) != size) {
+		fputs("Read error.\n", stderr);
+		return NULL;
+	}
+
+	fclose(file);
+	return result;
+}
+
+
+
 int		main(int ac, char **av)
 {
 	int		fd;
-	char	buf[2048];
+	char	*buf;
 	int		size;
 
 	if (ac != 2)
@@ -90,11 +120,18 @@ int		main(int ac, char **av)
 	{
 		ft_putstr("error");
 		return (1);
-	}
+	}/*
 	while (size == read(fd, buf, 2047))
-		write (1, buf, size);
+		write (1, buf, size);*/
+	buf = read_from_file(av[1]);
+	printf("%s",buf);
+	printf("\n%d\n", verification(buf));
 	if (verification(buf) == 1)
-		ft_putstr("error");
+		ft_putstr("error\n");
+	printf("%d\n", verification(buf));
+	affichagelist(ft_construction(tableaupieces(buf)));
+
+	printf("%s\n", "hahaha");
 	placementmap(ft_construction(tableaupieces(buf)));
 	close (fd);
 	return (0);
