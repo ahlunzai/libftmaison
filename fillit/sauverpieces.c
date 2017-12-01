@@ -6,18 +6,18 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/26 00:02:18 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/30 03:06:03 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/01 10:36:57 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "header.h"
 
-static int		nbrederet(char *str)
+int		nbrederet(char *str)
 {
 	int		i;
 
-	i = 0;
+	i = 1;
 	while (*str)
 	{
 		if (*str == '\n')
@@ -65,8 +65,10 @@ pieces_list		**ft_construction(char **tab)
 	pieces_list *tmp;
 	pieces_list **begin;
 
-	list = (pieces_list *)malloc(sizeof(pieces_list));
-	begin = (pieces_list **)malloc(sizeof(pieces_list *));
+	if(!(list = (pieces_list *)malloc(sizeof(pieces_list))))
+		return (NULL);
+	if(!(begin = (pieces_list **)malloc(sizeof(pieces_list *))))
+		return (NULL);
 	tmp = NULL;
 	save = list;
 	i = 0;

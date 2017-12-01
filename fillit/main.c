@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 01:41:55 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/30 04:18:17 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/01 13:38:34 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,15 +124,13 @@ int		main(int ac, char **av)
 	while (size == read(fd, buf, 2047))
 		write (1, buf, size);*/
 	buf = read_from_file(av[1]);
-	printf("%s",buf);
+//	printf("%s",buf);
 	printf("\n%d\n", verification(buf));
 	if (verification(buf) == 1)
 		ft_putstr("error\n");
 	printf("%d\n", verification(buf));
 	affichagelist(ft_construction(tableaupieces(buf)));
-
 	printf("%s\n", "hahaha");
-	placementmap(ft_construction(tableaupieces(buf)));
 	close (fd);
 	return (0);
 };

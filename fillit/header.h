@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 23:53:11 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/30 05:13:25 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/01 13:42:00 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@ typedef struct			tetris_list
 {
 	int tab[4][2];
 
+	int i;
 	struct tetris_list	*next;
 	struct tetris_list	*previous;
 }						pieces_list;
 
 typedef struct			grille_list
 {
-	int *tab;
+	char **map;
 	int x;
 	int y;
-	int taille;
+	int lenline;
+	int sizemap;
 }						g_list;
 
 void					affichagelist(pieces_list **list);
