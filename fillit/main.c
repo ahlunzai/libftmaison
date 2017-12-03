@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 01:41:55 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/01 13:38:34 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/02 13:08:06 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,9 @@ char *read_from_file(const char *filename)
 int		main(int ac, char **av)
 {
 	int		fd;
-	char	*buf;
+	char	buf[2048];
 	int		size;
+	char	*buf2;
 
 	if (ac != 2)
 		return (write(1, "usage: fillit source_file", 26));
@@ -120,16 +121,15 @@ int		main(int ac, char **av)
 	{
 		ft_putstr("error");
 		return (1);
-	}/*
-	while (size == read(fd, buf, 2047))
-		write (1, buf, size);*/
-	buf = read_from_file(av[1]);
-//	printf("%s",buf);
+	}
+	while ((size = read(fd, buf, 2047)));
+	buf2 = read_from_file(av[1]);
+	printf("bu2 %s\n",buf2);
 	printf("\n%d\n", verification(buf));
 	if (verification(buf) == 1)
 		ft_putstr("error\n");
 	printf("%d\n", verification(buf));
-	affichagelist(ft_construction(tableaupieces(buf)));
+	affichagelist(ft_construction(tableaupieces(buf2)));
 	printf("%s\n", "hahaha");
 	close (fd);
 	return (0);

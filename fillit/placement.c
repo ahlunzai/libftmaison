@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/01 00:24:06 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/01 12:25:39 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/03 01:19:17 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ g_list		*creationtableau(int size)
 	grille->y = 0;
 	grille->lenline = size;
 	grille->sizemap = size * size;
-	grille->gap = 0;
 	if(!(grille->map = (char **)malloc(sizeof(char *) * grille->lenline)))
 		return (NULL);
 	i = -1;
@@ -41,50 +40,58 @@ g_list		*creationtableau(int size)
 	return (grille);
 }
 
-int			place_pieces(g_list *grille, pieces_list **list, int i)
+int			possible_pieces(g_list *grille, pieces_list **list)
 {
 	int		k;
 
-	while (grille->x < grille->lenline && grille->gap < (grille->lenline * 2))
+	while (grille->x < grille->lenline)
 	{
-		grille->y = 0;
-		while (grille->y < grille->lenline 
-				&& grille->gap < (grille->lenline * 2))
+		while (grille->y < grille->lenline)
 		{
 			k = 0;
 			while (grille->map[grille->x + (*list)->tab[k][0]]
 					[grille->y + (*list)->tab[k][1]] == '.')
-			{
-				grille->map[grille->x + (*list)->tab[k][0]]
-					[grille->y + (*list)->tab[k][1]] = 'A' + i;
 				k++;
-			}
 			if (k == 4)
 				return (1);
 			else
-			{
 				(grille->y)++;
-				grille->gap++;
-			}
 		}
 		(grille->x)++;
-		(grille->gap)++;
 	}
 	return (0);
 }
 
-char		**placement(g_list *grille, pieces_list **list)
+g_list		*place_piece(g_list *grille, pieces_list **list, int i)
 {
-	if (grille->gap < (grille->lenline * 2) && list != NULL)
+	g_list		*new;
+	int			k;
+
+	k = -1;
+
+	if(!(new = (g_list *)malloc(sizeof(g_list))))
+		return (NULL);
+	new = grille;
+	while (++k < 4)
+		new->map[new->x + (*list)->tab[k][0]][new->y + (*list)->tab[k][1]]
+			= 'A' + i;
+	return (new);
+}
+
+int		backtracking(g_list *grille, pieces_list **list, int i)
+{
+	g_list *new;
+
+	if (*list == NULL)
+		return (1);
+	if (possible_pieces(grille, list) == 1)
 	{
-		if (place_pieces(grille, list, i) == 1)
-			placement(grille, ++list, ++i);
+		*list = (*list)->next;
+		if (possible_pieces(grille, list) == 0)
+		{
+			*list = (*list)->previous;
+			grille->y += 1;
 	}
-	if (grille->gap >= (grille->lenline * 2) || list != NULL)
-	{
-		grille->lenline = grille->lenline + 1;
-		grille->gap = 0;
-		placement(grille, list, i);
-	}
-	return (grille->map);
+
+	return (0);
 }

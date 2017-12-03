@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 03:07:38 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/01 13:43:01 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/02 13:17:14 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	affichagelist(pieces_list **list)
 		i++;
 		ft_putchar('\n');
 	}
-	list++;
-	if (list != NULL)
+	(*list) = (*list)->next;
+	if (*list != NULL)
 		affichagelist(list);
 }
