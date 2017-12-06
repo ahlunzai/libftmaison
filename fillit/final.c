@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/05 10:32:52 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/06 05:32:54 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/06 06:21:13 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,11 @@ int		libre(g_list *grille, pieces_list **list, int x, int y)
 			ft_putstr("rentre dans 2eme while\n");
 			k = 0;
 			while (grille->map[grille->x + (*list)->tab[k][0]]
-					[grille->y + (*list)->tab[k][1]] == '.')
+					[grille->y + (*list)->tab[k][1]] == '.' && k < 4)
+			{
+				ft_putstr("rentre dans while bug\n");
 				k++;
+			}
 			ft_putstr("a fini le 3eme while\n");
 			if (k == 4)
 			{
@@ -112,14 +115,17 @@ char	**placepieces(g_list *grille, pieces_list **list, int x, int y)
 		ft_putstr("rentre dans boucle while \n");
 		if (libre(grille, list, 0, 0) == 1)
 		{
-			ft_putstr("premier if");
+			ft_putstr("premier if\n");
 			place_piece(grille, list, ++(grille->i));
-			if (libre(grille, &(*list)->next, 0, 0) == 1)
-				placepieces(grille, &(*list)->next, grille->x, grille->y);
-			else if (*list == NULL)
+			ft_putstr("fini le deuxieme place piece\n\n");
+			*list = (*list)->next;
+			if (*list == NULL)
 				return (grille->map);
+			if (libre(grille, list, 0, 0) == 1)
+				placepieces(grille, list, grille->x, grille->y);
 			else
 			{
+				*list = (*list)->previous;
 				supprime_piece(grille, list);
 				(grille->i)--;
 				(grille->y)++;

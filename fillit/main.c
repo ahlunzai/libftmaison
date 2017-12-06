@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 01:41:55 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/06 05:31:56 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/06 06:21:17 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,10 @@ void		sorttab(char **tab)
 	int j;
 
 	i = -1;
-	while (++i < 5)
+	while (++i < 4)
 	{
 		j = -1;
-		while (++j < 5)
+		while (++j < 4)
 			ft_putchar(tab[i][j]);
 		ft_putchar('\n');
 	}
@@ -141,8 +141,8 @@ int		main(int ac, char **av)
 	if (verification(buf) == 1)
 		ft_putstr("error\n");
 //	affichagelist(ft_construction(tableaupieces(buf)));
-	sorttab(placepieces(creationtableau(5), ft_construction(tableaupieces(buf)), 0, 0));
-	printf("%s\n", "hahaha");
+	sorttab(placepieces(creationtableau(4), ft_construction(tableaupieces(buf)), 0, 0));
+	printf("\n%s\n", "hahaha");
 	close (fd);
 	return (0);
 };
