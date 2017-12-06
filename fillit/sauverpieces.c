@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/26 00:02:18 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/01 10:36:57 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/06 05:22:39 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ pieces_list		**ft_construction(char **tab)
 			list = list->next;
 		}
 	}
-	list = 0;
+	list = NULL;
 	*begin = save;
 	return (begin);
 }
