@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/05 10:32:52 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/06 06:21:13 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/07 14:18:32 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,51 +36,43 @@ g_list	*creationtableau(int size)
 		while (++j < grille->lenline)
 			grille->map[i][j] = '.';
 	}
-	ft_putstr("ca marche creation tableau\n");
 	return (grille);
 }
 
-int		libre(g_list *grille, pieces_list **list, int x, int y)
+int		libre(g_list *grille, pieces_list *list, int x, int y)
 {
 	int		k;
 
-	ft_putstr("rentre dans libre\n");
 	grille->x = x;
 	grille->y = y;
 	while (grille->x < grille->lenline)
 	{
-		ft_putstr("rentre dans 1er while\n");
 		while (grille->y < grille->lenline)
 		{
-			ft_putstr("rentre dans 2eme while\n");
 			k = 0;
-			while (grille->map[grille->x + (*list)->tab[k][0]]
-					[grille->y + (*list)->tab[k][1]] == '.' && k < 4)
-			{
-				ft_putstr("rentre dans while bug\n");
+			while (k < 4 && grille->x + list->tab[k][0] != grille->lenline &&
+					grille->y + list->tab[k][1] != grille->lenline
+					&& grille->map[(grille->x + list->tab[k][0])][(grille->y + list->tab[k][1])] == '.')
 				k++;
-			}
-			ft_putstr("a fini le 3eme while\n");
 			if (k == 4)
 			{
-				ft_putstr("ca marche libre\n");
 				return (1);
 			}
-			else
-				(grille->y)++;
+			(grille->y)++;
 		}
 		(grille->x)++;
+		grille->y = 0;
 	}
 	return (0);
 }
 
-void		place_piece(g_list *grille, pieces_list **list, int i)
+void		place_piece(g_list *grille, pieces_list *list, int i)
 {
 	int			k;
 
 	k = -1;
 	while (++k < 4)
-		grille->map[grille->x + (*list)->tab[k][0]][grille->y + (*list)->tab[k][1]]
+		grille->map[grille->x + list->tab[k][0]][grille->y + list->tab[k][1]]
 			= 'A' + i;
 	(grille->y)++;
 	if (grille->y == grille->lenline)
@@ -90,57 +82,57 @@ void		place_piece(g_list *grille, pieces_list **list, int i)
 	}
 }
 
-void		supprime_piece(g_list *grille, pieces_list **list)
+void		supprime_piece(g_list *grille, pieces_list *list)
 {
 	int			k;
 
-	(grille->y)--;
-	if (grille->y < 0)
+	(grille->x)--;
+	(grille->y) = grille->lenline - 1;
+	while (grille->map[grille->x][grille->y] != ('A' + grille->i))
 	{
-		(grille->x)--;
-		grille->y = grille->lenline - 1;
+		(grille->y)--;
+		if ((grille->y) == -1)
+		{
+			(grille->x)--;
+			(grille->y) = grille->lenline - 1;
+		}
 	}
 	k = -1;
 	while (++k < 4)
-		grille->map[grille->x + (*list)->tab[k][0]][grille->y + (*list)->tab[k][1]]
-			= '.';
+	{
+		grille->map[(grille->x - list->tab[k][0])][(grille->y - list->tab[k][1])] = '.';
+	}
 }
 
-
-char	**placepieces(g_list *grille, pieces_list **list, int x, int y)
+g_list		*placepieces(g_list *grille, pieces_list *list, int x, int y)
 {
-	ft_putstr("debut de placepieces\n");
-	while (*list != NULL)
+	if (list != NULL)
 	{
-		ft_putstr("rentre dans boucle while \n");
-		if (libre(grille, list, 0, 0) == 1)
+		if (libre(grille, list, x, y) == 1)
 		{
-			ft_putstr("premier if\n");
 			place_piece(grille, list, ++(grille->i));
-			ft_putstr("fini le deuxieme place piece\n\n");
-			*list = (*list)->next;
-			if (*list == NULL)
-				return (grille->map);
-			if (libre(grille, list, 0, 0) == 1)
-				placepieces(grille, list, grille->x, grille->y);
-			else
+			sorttab(grille);
+			ft_putchar('\n');
+			if (list->next == NULL)
+				return (grille);
+			return (placepieces(grille, list->next, 0, 0));
+		}
+		if (list->previous != NULL)
+		{
+			supprime_piece(grille, list->previous);
+			(grille->i)--;
+			(grille->y)++;
+			if ((grille->y) == grille->lenline)
 			{
-				*list = (*list)->previous;
-				supprime_piece(grille, list);
-				(grille->i)--;
-				(grille->y)++;
-				if (grille->y == grille->lenline)
-				{
-					(grille->x)++;
-					grille->y = 0;
-				}
-				if (grille->x == grille->lenline)
-					placepieces(creationtableau(grille->lenline + 1), list, 0, 0);
-				placepieces(grille, list, grille->x, grille->y);
+				(grille->x)++;
+				(grille->y) = 0;
 			}
 		}
-		else
-			placepieces(creationtableau(grille->lenline + 1), list, 0, 0);
+		if (list->previous != NULL && grille->x != grille->lenline)
+			return (placepieces(grille, list->previous, grille->x, grille->y));
+		while (list->previous != NULL)
+			list = list->previous;
+		return(placepieces(creationtableau(grille->lenline + 1), list, 0, 0));
 	}
-	return (grille->map);
-}
+	return (grille);
+	}

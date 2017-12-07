@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/26 00:02:18 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/06 05:22:39 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/07 10:59:55 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,56 +53,66 @@ char **tableaupieces(char *str)
 	return (tab);
 }
 
-pieces_list		**ft_construction(char **tab)
+pieces_list		*ft_construction(char **tab)
 {
 	int i;
 	int j;
 	int k;
-	int shiftx;
-	int shifty;
 	pieces_list *list;
 	pieces_list *save;
 	pieces_list *tmp;
-	pieces_list **begin;
-
+	
 	if(!(list = (pieces_list *)malloc(sizeof(pieces_list))))
 		return (NULL);
-	if(!(begin = (pieces_list **)malloc(sizeof(pieces_list *))))
-		return (NULL);
-	tmp = NULL;
+	list->previous = NULL;
+	list->next = NULL;
 	save = list;
 	i = 0;
 	while (tab[i] != 0)
 	{
 		k = 0;
-		while ((i + 1) % 5 != 0)
+		while ((i + 1) % 5 != 0 && tab[i] != 0)
 		{
 			j = -1;
 			while (++j < 4)
 			{
-				if (tab[i][j] == '#')
+				if (tab[i][j] && tab[i][j] == '#')
 				{
 					if (k == 0)
 					{
-						shiftx = i;
-						shifty = j;
+						list->shiftx = i;
+						list->shifty = j;
 					}
-					list->tab[k][0] = i - shiftx;
-					list->tab[k][1] = j - shifty;
+					list->tab[k][0] = i - list->shiftx;
+					list->tab[k][1] = j - list->shifty;
 					k++;
 				}
 			}
 			i++;
 		}
-		if ((i + 1) % 5 == 0)
+		if (tab[i] != 0 && (i + 1) % 5 == 0)
 		{
 			i++;
-			list->previous = tmp;
 			tmp = list;
+			if(!(list->next = (pieces_list *)malloc(sizeof(pieces_list))))
+				return (NULL);
 			list = list->next;
+			list->next = NULL;
+			list->previous = tmp;
 		}
 	}
-	list = NULL;
-	*begin = save;
-	return (begin);
+	return (save);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

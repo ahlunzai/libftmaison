@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 01:41:55 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/12/06 06:21:17 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/07 14:05:13 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,56 +76,40 @@ int		verification(char *str)
 	return (0);
 }
 
-char *read_from_file(const char *filename)
-{
-	long int size = 0;
-	FILE *file = fopen(filename, "r");
-
-	if(!file) {
-		fputs("File error.\n", stderr);
-		return NULL;
-	}
-
-	fseek(file, 0, SEEK_END);
-	size = ftell(file);
-	rewind(file);
-
-	char *result = (char *) malloc(size);
-	if(!result) {
-		fputs("Memory error.\n", stderr);
-		return NULL;
-	}
-
-	if(fread(result, 1, size, file) != size) {
-		fputs("Read error.\n", stderr);
-		return NULL;
-	}
-
-	fclose(file);
-	return result;
-}
-
-void		sorttab(char **tab)
+void		sorttab(g_list *grille)
 {
 	int i;
 	int j;
 
 	i = -1;
-	while (++i < 4)
+	while (++i < grille->lenline)
 	{
 		j = -1;
-		while (++j < 4)
-			ft_putchar(tab[i][j]);
+		while (++j < grille->lenline)
+			ft_putchar(grille->map[i][j]);
 		ft_putchar('\n');
 	}
+}
+
+int			taillemini(char *buf)
+{
+	int i;
+	int j;
+
+	j = 1;
+	i = ((nbrederet(buf) + 1) / 5) * 4;
+	while (j * j < i)
+		j++;
+	return (j);
 }
 
 int		main(int ac, char **av)
 {
 	int		fd;
-	char	buf[2048];
+	char	buf[4096];
 	int		size;
 	char	*buf2;
+	pieces_list		*list;
 
 	if (ac != 2)
 		return (write(1, "usage: fillit source_file", 26));
@@ -135,13 +119,16 @@ int		main(int ac, char **av)
 		ft_putstr("error");
 		return (1);
 	}
-	while ((size = read(fd, buf, 2047)));
-	buf2 = read_from_file(av[1]);
-	printf("%s\n",buf2);
+	size = read(fd, buf, 4095);
+	buf[size] = 0;
+	printf("%s\n",buf);
 	if (verification(buf) == 1)
+	{
 		ft_putstr("error\n");
-//	affichagelist(ft_construction(tableaupieces(buf)));
-	sorttab(placepieces(creationtableau(4), ft_construction(tableaupieces(buf)), 0, 0));
+		return (1);
+	}
+	printf("size = [%d]\n", size);
+	sorttab(placepieces(creationtableau(taillemini(buf)), ft_construction(tableaupieces(buf)), 0, 0));
 	printf("\n%s\n", "hahaha");
 	close (fd);
 	return (0);
