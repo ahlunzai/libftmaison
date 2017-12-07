@@ -6,7 +6,7 @@
 /*   By: gsysaath <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/19 16:08:02 by gsysaath          #+#    #+#             */
-/*   Updated: 2017/11/24 00:53:44 by gsysaath         ###   ########.fr       */
+/*   Updated: 2017/12/07 01:15:06 by gsysaath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 && !s2)
 		return (NULL);
-	if (s1 == '\0')
+	if (*s1 == '\0')
 		return (ft_strdup(s2));
-	if (s2 == '\0')
+	if (*s2 == '\0')
 		return (ft_strdup(s1));
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
